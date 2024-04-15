@@ -11,30 +11,44 @@ import { PersonService } from '../person.service';
 export class DeletePersonComponent {
   cpf: string = '';
   id: string = '';
-  modalOpened: boolean = false;
 
   constructor(private personService: PersonService) {}
 
   getPersonsByCpf(): void {
-    this.personService.getPersonsByCpf(this.cpf).subscribe(person => {
-      if (!this.modalOpened) {
-        const modal = document.getElementById('deleteConfirmationModal');
-        if (modal) {
-          modal.classList.add('show'); 
-          modal.setAttribute('style', 'display: block');
-          this.modalOpened = true;
-        }
-      }
-      this.id = person._id;
-
-
-    }, error => {
-      console.error('Erro ao buscar pessoa:', error);
-    });
+    if(this.cpf != ''){
+      this.personService.getPersonsByCpf(this.cpf).subscribe({next: person => {
+        this.showOrHideModal(true, "deleteConfirmationModal")
+        this.id = person._id;
+  
+  
+      }, error: ()=>{
+        alert("insira um CPF válido")
+      }});
+    }else{
+      alert("insira um CPF válido")
+    }
+    
   }
   deletePerson(){
-    this.personService.deletePerson(this.id).subscribe(()=>{
+    this.personService.deletePerson(this.id).subscribe({next: ()=>{
+      this.showOrHideModal(false, "deleteConfirmationModal");
+      this.showOrHideModal(true, "confirmationModal");
+    }, error: ()=>{
+      alert("erro ao deletar")
+    }})
+  }
 
-    })
+  showOrHideModal(showOrHide: boolean, modalId: string){
+    const modal = document.getElementById(modalId);
+    if(modal){
+      if(showOrHide){
+        modal.classList.add('show'); 
+        modal.setAttribute('style', 'display: block');
+          
+      }else{
+        modal.classList.add('hide'); 
+        modal.setAttribute('style', 'display: none');
+      }
+    }
   }
 }

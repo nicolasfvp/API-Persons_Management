@@ -40,22 +40,19 @@ export class PostPersonComponent {
 
   searchByCep(): void {
     if (this.address.cep.length === 8) {
-      this.viaCepService.searchCep(this.address.cep).subscribe(
-        data => {
+      this.viaCepService.searchCep(this.address.cep).subscribe( {next: (data) => {
+          console.log(data)
           this.address.street = data.logradouro; 
           this.address.complement = data.complemento; 
           this.address.neighborhood = data.bairro; 
           this.address.city = data.localidade; 
           this.address.state = data.uf; 
           
-        },
-        error => {
-          console.error('Erro ao buscar endereço por CEP:', error);
-        }
+        }}
       );
+    }else{
+      alert("CEP inválido. Insira apenas numeros")
     }
-  
-    
   }
 
   calcAge(birthDate: Date): { age: number, daysUntillNextBirthday: number } {
@@ -87,19 +84,18 @@ export class PostPersonComponent {
   }
 
 
-  // verificar esta seção
   async verifyCpf(cpf: string): Promise<boolean> {
-    let existeCpf: boolean = false;
-    let p = new Promise<boolean>((resolve, rejected)=>{
+    let cpfDoNotExist: boolean = false;
+    let promise = new Promise<boolean>((resolve, rejected)=>{
       this.personService.getPersonsByCpf(cpf).subscribe({next: (person)=>{
-        resolve(existeCpf)
+        resolve(cpfDoNotExist)
       }, error: ()=>{
-          existeCpf = true
-        resolve(existeCpf)
+          cpfDoNotExist = true
+        resolve(cpfDoNotExist)
       }})
 
     })
-    return await p
+    return await promise
   }
   
 
@@ -121,26 +117,29 @@ export class PostPersonComponent {
       birthDate: this.birthDate,
       maritalStatus: this.maritalStatus,
     };
-    
+  
       if(await this.verifyCpf(this.cpf)){
-        this.personService.postPerson(newPerson).subscribe(() => {
-          console.log("cadastrado")
-          this.personService.getPersonsByCpf(newPerson.cpf).subscribe(person=>{
-            this.personService.postAddress(person._id, newAddress).subscribe(()=>{
-              console.log('Endereço cadastrado com sucesso')
-            }, error => {
-              console.error('Erro ao cadastrar endereço', error)
-            })
-          }, error => {
-            console.error('Erro ao cadastrar endereço', error)
-          })
-        }, error => {
-          console.error('Erro ao cadastrar pessoa:', error);
-        });
+        this.personService.postPerson(newPerson).subscribe({next: ()=>{
+          this.personService.getPersonsByCpf(newPerson.cpf).subscribe({next: (person)=>{
+            this.personService.postAddress(person._id, newAddress).subscribe({next: ()=>{
+              const age = this.calcAge(person.birthDate);
+              if(age.daysUntillNextBirthday === 365){
+                alert("parabens! é seu aniversário de "+ age.age+ " anos!")
+              }else{
+                alert("você tem " + age.age + " anos e faltam " + age.daysUntillNextBirthday + " dias até seu próximo aniversário")
+              }
+            }, error: ()=>{
+              alert('Erro ao cadastrar endereço')
+            }})
+          }, error: ()=>{
+            alert('Erro ao cadastrar endereço')
+          }})
+        }, error: ()=>{
+          alert('Erro ao cadastrar pessoa:')
+        }});
       }else{
-        console.error("cpf ja existente")
+        alert("cpf ja existente")
         return
       }
     }
   }
-

@@ -17,7 +17,7 @@ export class GetPersonComponent {
   constructor(private router: Router, private personService: PersonService) {}
 
   getPersonsByCpf(): void {
-    this.personService.getPersonsByCpf(this.cpf).subscribe(person => {
+    this.personService.getPersonsByCpf(this.cpf).subscribe({next:(person) =>{
       this.person = person;
       this.addresses = person.addresses[0];
       if (!this.modalOpened) {
@@ -28,12 +28,11 @@ export class GetPersonComponent {
           this.modalOpened = true;
         }
       }
-    }, error => {
-      console.error('Erro ao buscar pessoa:', error);
-    });
+    }, error: ()=> {
+      alert("CPF inexistente")
+    }})
   }
   closeModal(): void {
-    console.log("oi")
       const modal = document.getElementById('personModal');
       if (modal) {
         modal.classList.remove('show');

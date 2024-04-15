@@ -19,7 +19,6 @@ export class OperatePersonComponent implements OnInit {
 
   getPersons() {
     this.personService.getPersons().subscribe((data: any) => {
-      console.log(data);
     });
   }
 }
