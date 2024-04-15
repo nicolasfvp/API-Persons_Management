@@ -1,0 +1,27 @@
+<div class="delete-person-container">
+  <form class="form-inline my-2 my-lg-0" (submit)="getPersonsByCpf()">
+    <input class="form-control mr-sm-2" type="search" placeholder="Buscar Pessoa" aria-label="Buscar Pessoa" [(ngModel)]="cpf" name="cpf" required>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Digite o CPF da pessoa que deseja deletar</button>
+  </form>
+
+
+  <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirmar Exclusão</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Tem certeza que deseja excluir esta pessoa?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" (click)="deletePerson()">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

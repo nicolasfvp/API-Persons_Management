@@ -1,0 +1,39 @@
+<div class="get-person-container">
+  <form class="form-inline my-2 my-lg-0" (submit)="getPersonsByCpf()">
+    <input class="form-control mr-sm-2" type="search" placeholder="Buscar Pessoa" aria-label="Buscar Pessoa" [(ngModel)]="cpf" name="cpf" required>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+  </form>
+
+  <div class="modal fade" id="personModal" tabindex="-1" role="dialog" aria-labelledby="personModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="row w-100">
+            <div class="col-10">
+              <h5 class="modal-title" id="personModalLabel">Informações da Pessoa</h5>
+            </div>
+            <div class="col-2 d-flex justify-content-end">
+              <button type="button" class="close btn btn-light" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <p><strong>Nome:</strong> {{ person.name }}</p>
+          <p><strong>CPF:</strong> {{ person.cpf }}</p>
+          <p><strong>Aniversario:</strong> {{ person.birthDay }}</p>    
+          <p><strong>Genero:</strong> {{ person.gender }}</p>
+          <p><strong>Estado Civil:</strong> {{ person.maritalStatus }}</p>
+          <p><strong>Cep:</strong> {{ addresses.cep }}</p>
+          <p><strong>Rua:</strong> {{ addresses.address }}</p>
+          <p><strong>Numero:</strong> {{ addresses.number }}</p>
+          <p><strong>Complemento:</strong> {{ addresses.complement }}</p>
+          <p><strong>Bairro:</strong> {{ addresses.neighborhood }}</p>
+          <p><strong>Cidade:</strong> {{ addresses.city }}</p>
+          <p><strong>Estado:</strong> {{ addresses.state }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
